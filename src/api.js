@@ -15,6 +15,10 @@ router.get("/", (req, res) => {
   });
 });
 
+router.post("/test-data", (req, res) => {
+  res.json(req.body);
+});
+
 router.post("/send-data", (req, res) => {
   try {
     const fileData = fs.readFileSync(path.join("./", "data.json"));
