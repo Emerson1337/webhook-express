@@ -16,9 +16,11 @@ router.get("/", (req, res) => {
 });
 
 router.post("/send-data", (req, res) => {
-  const date = Date.now();
+  const fileData = fs.readFileSync(path.join("./", "data.json"));
+  const content = JSON.parse(fileData.toString());
+  content.push(req.body);
 
-  fs.writeFile(`${date}.json`, JSON.stringify(req.body), function (err) {
+  fs.writeFile(`data.json`, JSON.stringify(content), function (err) {
     if (err) {
       console.log(err);
     }
@@ -28,22 +30,11 @@ router.post("/send-data", (req, res) => {
 });
 
 router.get("/get-data", (req, res) => {
-  const jsonsInDir = fs
-    .readdirSync("./")
-    .filter(
-      (file) =>
-        path.extname(file) === ".json" &&
-        !path.basename(file).includes("package")
-    );
+  const fileData = JSON.parse(
+    fs.readFileSync(path.join("./", "data.json")).toString()
+  );
 
-  const allContents = [];
-
-  jsonsInDir.forEach((file) => {
-    const fileData = fs.readFileSync(path.join("./", file)).toString();
-    allContents.push(JSON.parse(fileData.toString()));
-  });
-
-  res.json(allContents);
+  res.json(fileData);
 });
 
 app.use(`/.netlify/functions/api`, router);
