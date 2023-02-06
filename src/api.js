@@ -16,25 +16,33 @@ router.get("/", (req, res) => {
 });
 
 router.post("/send-data", (req, res) => {
-  const fileData = fs.readFileSync(path.join("./", "data.json"));
-  const content = JSON.parse(fileData.toString());
-  content.push(req.body);
+  try {
+    const fileData = fs.readFileSync(path.join("./", "data.json"));
+    const content = JSON.parse(fileData.toString());
+    content.push(req.body);
 
-  fs.writeFile(`data.json`, JSON.stringify(content), function (err) {
-    if (err) {
-      console.log(err);
-    }
-  });
+    fs.writeFile(`data.json`, JSON.stringify(content), function (err) {
+      if (err) {
+        console.log(err);
+      }
+    });
 
-  res.json({ message: "saved!" });
+    res.json({ message: "saved!" });
+  } catch (err) {
+    res.json(err);
+  }
 });
 
 router.get("/get-data", (req, res) => {
-  const fileData = JSON.parse(
-    fs.readFileSync(path.join("./", "data.json")).toString()
-  );
+  try {
+    const fileData = JSON.parse(
+      fs.readFileSync(path.join("./", "data.json")).toString()
+    );
 
-  res.json(fileData);
+    res.json(fileData);
+  } catch (error) {
+    res.json(err);
+  }
 });
 
 app.use(`/.netlify/functions/api`, router);
