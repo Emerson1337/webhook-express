@@ -12,8 +12,9 @@ route.get("/", (req: Request, res: Response) => {
 });
 
 route.post("/send-data", (req: Request, res: Response) => {
-  const date = new Date().toJSON();
-  fs.writeFile(`data/${date}.json`, req.body, function (err) {
+  const date = Date.now();
+
+  fs.writeFile(`${date}.json`, JSON.stringify(req.body), function (err) {
     if (err) {
       console.log(err);
     }
