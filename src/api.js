@@ -7,7 +7,7 @@ const path = require("path");
 const app = express();
 const router = express.Router();
 
-const file = require("../data.json");
+const file = require("../dist/data.json");
 
 app.use(express.json());
 
@@ -36,13 +36,9 @@ router.post("/send-data", (req, res) => {
 
 router.get("/get-data", (req, res) => {
   try {
-    const filePath = "data.json";
-
-    const fileData = JSON.parse(fs.readFileSync(filePath).toString());
-
-    res.json(fileData);
+    res.json(file);
   } catch (error) {
-    res.json(err);
+    res.json(error);
   }
 });
 
