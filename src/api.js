@@ -7,7 +7,7 @@ const path = require("path");
 const app = express();
 const router = express.Router();
 
-const file = require("../dist/data.json");
+const file = require("../data.json");
 
 app.use(express.json());
 
