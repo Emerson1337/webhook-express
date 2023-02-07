@@ -23,7 +23,9 @@ router.post("/test-data", (req, res) => {
 
 router.post("/send-data", (req, res) => {
   const content = file;
-  content.push(req.body);
+  const date = Date.now();
+
+  content.push({ date: date, content: req.body });
 
   fs.writeFile("data.json", JSON.stringify(content), function (err) {
     if (err) {
