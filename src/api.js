@@ -7,6 +7,8 @@ const path = require("path");
 const app = express();
 const router = express.Router();
 
+const file = require("../data.json");
+
 app.use(express.json());
 
 router.get("/", (req, res) => {
@@ -20,28 +22,23 @@ router.post("/test-data", (req, res) => {
 });
 
 router.post("/send-data", (req, res) => {
-  try {
-    const fileData = fs.readFileSync(path.join("./", "data.json"));
-    const content = JSON.parse(fileData.toString());
-    content.push(req.body);
+  const content = file;
+  content.push(req.body);
 
-    fs.writeFile(`data.json`, JSON.stringify(content), function (err) {
-      if (err) {
-        console.log(err);
-      }
-    });
+  fs.writeFile("data.json", JSON.stringify(content), function (err) {
+    if (err) {
+      console.log(err);
+    }
+  });
 
-    res.json({ message: "saved!" });
-  } catch (err) {
-    res.json(err);
-  }
+  res.json({ message: "saved!" });
 });
 
 router.get("/get-data", (req, res) => {
   try {
-    const fileData = JSON.parse(
-      fs.readFileSync(path.join("./", "data.json")).toString()
-    );
+    const filePath = "data.json";
+
+    const fileData = JSON.parse(fs.readFileSync(filePath).toString());
 
     res.json(fileData);
   } catch (error) {
